@@ -57,16 +57,17 @@ DepthImageToLaserScanROS::DepthImageToLaserScanROS(const rclcpp::NodeOptions & o
     this->create_subscription<sensor_msgs::msg::Image>("/stereo/converted_depth", qos,
       std::bind(&DepthImageToLaserScanROS::depthCb, this, std::placeholders::_1));
 
-  scan_pub_ = this->create_publisher<sensor_msgs::msg::LaserScan>("scan", qos);
+  scan_pub_ = this->create_publisher<sensor_msgs::msg::LaserScan>("scan_alt", qos);
 
   float scan_time = this->declare_parameter("scan_time", 0.033);
 
-  float range_min = this->declare_parameter("range_min", 0.20);
+  float range_min = this->declare_parameter("range_min", 0.25);
   float range_max  = this->declare_parameter("range_max", 4);
 
-  int scan_height = this->declare_parameter("scan_height",40);
+  int scan_height = this->declare_parameter("scan_height",30);
 
-  std::string output_frame = this->declare_parameter("output_frame", "oak_rgb_camera_frame");
+  //std::string output_frame = this->declare_parameter("output_frame", "oak_rgb_camera_frame");
+  std::string output_frame = this->declare_parameter("output_frame", "camera_link");
 
   dtl_ = std::make_unique<depthimage_to_laserscan::DepthImageToLaserScan>(scan_time, range_min,
                                                                           range_max, scan_height, output_frame);
